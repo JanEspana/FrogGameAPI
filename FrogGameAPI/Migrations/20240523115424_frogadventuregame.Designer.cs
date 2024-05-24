@@ -3,6 +3,7 @@ using FrogGameAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FrogGameAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240523115424_frogadventuregame")]
+    partial class frogadventuregame
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +23,27 @@ namespace FrogGameAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FrogGameAPI.Models.Player", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Character")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Players");
+                });
 
             modelBuilder.Entity("FrogGameAPI.Models.Score", b =>
                 {
@@ -29,21 +53,18 @@ namespace FrogGameAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("_id"));
 
-                    b.Property<string>("character")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("numFlies")
                         .HasColumnType("int");
 
-                    b.Property<string>("playerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("playerId")
+                        .HasColumnType("int");
 
                     b.Property<int>("time")
                         .HasColumnType("int");
 
                     b.HasKey("_id");
+
+                    b.HasIndex("playerId");
 
                     b.ToTable("Scores");
                 });
@@ -67,6 +88,17 @@ namespace FrogGameAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("FrogGameAPI.Models.Score", b =>
+                {
+                    b.HasOne("FrogGameAPI.Models.Player", "player")
+                        .WithMany()
+                        .HasForeignKey("playerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("player");
                 });
 #pragma warning restore 612, 618
         }

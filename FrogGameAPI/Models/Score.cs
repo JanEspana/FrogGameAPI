@@ -11,6 +11,8 @@ namespace FrogGameAPI.Models
         [Required]
         public int numFlies { get; set; }
         [Required]
-        public Player player { get; set; }
+        public string playerName { get; set; }
+        [Required]
+        public string character { get; set; }
     }
 }

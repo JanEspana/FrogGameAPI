@@ -2,13 +2,13 @@
 
 namespace FrogGameAPI.Models
 {
-    public class Player
+    public class User
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string Username { get; set; }
         [Required]
-        public string Character {  get; set; }
+        public string Password { get; set; }
     }
 }

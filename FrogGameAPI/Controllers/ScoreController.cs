@@ -1,5 +1,6 @@
 ﻿using FrogGameAPI.Models;
 using FrogGameAPI.Models.DTO;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FrogGameAPI.Controllers
@@ -53,9 +54,8 @@ namespace FrogGameAPI.Controllers
         {
             try
             {
-                Score? score = _context.Scores.FirstOrDefault(x => x.player.Name == playerName);
-                _response.Data = score;
-            }
+                IEnumerable<Score> scores = _context.Scores.Where(x => x.playerName == playerName).ToList();
+               }
             catch (Exception ex)
             {
                 _response.IsSuccessed = false;
